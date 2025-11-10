@@ -62,8 +62,11 @@ const renderSetup = () => {
 const startApp = async () => {
   try {
     // Dynamically import the configuration file.
-    // @ts-ignore - We expect this to fail if the file doesn't exist.
-    const configModule = await import('./config.js');
+    // The /* @vite-ignore */ comment is crucial. It tells the build tool (Vite/Rollup)
+    // not to try and bundle this file. We expect it to be missing during build,
+    // and we handle the error case gracefully at runtime.
+    // @ts-ignore
+    const configModule = await import(/* @vite-ignore */ './config.js');
     if (configModule.default) {
       renderApp(configModule.default);
     } else {
